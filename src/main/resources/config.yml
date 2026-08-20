@@ -1,0 +1,27 @@
+# ================= JoinSuite 主配置 / JoinSuite main configuration =================
+# 配置结构版本（插件自动维护，请勿修改）
+# Config structure version (auto-maintained by the plugin, do not edit)
+config-version: 2
+
+# 冷却时间（秒），0 或负数表示无冷却（仅作用于音效，悬浮文字不冷却）
+# Cooldowns in seconds, 0 or negative = no cooldown
+# (sounds only; holograms are never cooled down)
+cooldown:
+  join: 10
+  leave: 10
+  newbie: 0
+
+# 服务器统一语言，对应 lang/ 文件夹下的语言文件名（不含 .yml）
+# Server language, matches a file name under lang/ (without .yml)
+language: zh_CN
+
+# {time} 占位符的时间格式 / Time format for the {time} placeholder
+time-format: "HH:mm:ss"
+
+# OP 玩家进出是否触发效果（true = 不触发）
+# Whether OPs trigger join/leave effects (true = no effects for OPs)
+op-bypass: false
+
+# 调试模式：开启后在控制台输出每次事件的详细信息
+# Debug mode: log detailed event info to the console when enabled
+debug: false

@@ -1,0 +1,220 @@
+# ================= JoinSuite 分组配置 / JoinSuite group configuration =================
+# 配置结构版本（插件自动维护，请勿修改）
+# Config structure version (auto-maintained by the plugin, do not edit)
+config-version: 2
+
+# 需要 Minecraft 1.19.4 及以上（悬浮文字使用 TextDisplay，始终朝向观察者）
+# Requires Minecraft 1.19.4+ (holograms use TextDisplay, always facing the viewer)
+#
+# 所有文本支持 / All texts support:
+#   & 颜色代码 / & color codes
+#   &#RRGGBB 16进制颜色（全端真彩色）/ &#RRGGBB hex colors (true color on all clients)
+#   占位符 / Placeholders: {player} {world} {time}
+# 装有 PlaceholderAPI 时，文本里还可使用任意 PAPI 占位符，
+# 如 %player_ping% %server_online% 等（未识别的占位符原样保留）
+# With PlaceholderAPI installed, any PAPI placeholder can be used in texts,
+# e.g. %player_ping% %server_online% (unknown placeholders are kept as-is)
+
+# ---------- 功能模块（独立开关 + 独立权限节点） ----------
+# ---------- Modules (independent toggle + permission node each) ----------
+# permission 留空 "" 表示该模块不需要权限
+# Empty permission "" means the module requires no permission
+# 模块权限默认所有人生效，可在 LuckPerms 等权限插件中对个别人否定（false）来单独关闭
+# Module permissions default to granted for everyone; negate (false) per player
+# in LuckPerms or similar plugins to disable a module for specific players
+# 这些节点与下方各分组的 permission 都会注册到权限注册表，支持在 LP 中 Tab 补全
+# These nodes and each group permission below are registered into the Bukkit
+# permission registry, so they can be tab-completed in LuckPerms
+modules:
+  # 加入/离开音效模块 / Join/leave sound module
+  sound:
+    enabled: true
+    permission: "joinsuite.module.sound"
+  # 加入/离开悬浮文字模块 / Join/leave hologram module
+  hologram:
+    enabled: true
+    permission: "joinsuite.module.hologram"
+  # 加入/离开自定义消息模块（关闭后保留原版消息）
+  # Join/leave custom message module (vanilla messages kept when disabled)
+  message:
+    enabled: false
+    permission: "joinsuite.module.message"
+  # 加入公告模块（chat 聊天栏 / title 大标题 / subtitle 小标题 / actionbar 动作栏）
+  # Join announcement module (chat / title / subtitle / actionbar)
+  announce:
+    enabled: false
+    permission: "joinsuite.module.announce"
+
+# 是否启用默认组 / Enable the default group
+enable-default: true
+# 是否启用自定义权限组 / Enable custom permission groups
+enable-groups: false
+
+# ---------- 新玩家首次加入 / First-time players ----------
+# 匹配优先级：新玩家 > 自定义权限组（自上而下） > 默认组
+# Priority: newbie > custom permission groups (top to bottom) > default group
+# 各功能独立回落：某层没配置的功能自动取下一层（例如某组只配音效，悬浮/消息/公告用默认组）
+# Per-feature fallback: features not configured on a layer fall through to the
+# next layer (e.g. a group with only sounds uses default holograms/messages/announce)
+# height 说明：相对玩家脚下位置的高度，约 2.4 为头顶，约 0.4 为脚边
+# height: offset above the player's feet; ~2.4 = above head, ~0.4 = near feet
+newbie:
+  enabled: true
+  join-sound:
+    # 音效id / Sound id
+    sound: BLOCK_NOTE_BLOCK_PLING
+    # 音量 / Volume
+    volume: 1.0
+    # 音调 / Pitch
+    pitch: 2.0
+  join-hologram:
+    enabled: true
+    # 显示时长（秒）：顶层为兜底值，下面每行可单独覆盖
+    # Display duration (seconds): top-level is the fallback, each line may override
+    duration: 15
+    # 是否显示半透明背景（false 为纯文字）/ Show translucent background (false = text only)
+    background: true
+    # 每行：text 内容 / height 高度 / duration 该行独立持续秒数（可省略=用顶层值）
+    # Each line: text / height / duration in seconds (optional, falls back to top-level)
+    lines:
+      - text: "&e{player} &f在这个位置首次加入这里！"
+        height: 2.8
+        duration: 15
+      - text: "&7{time}"
+        height: 2.5
+        duration: 15
+  join-message: "&8[&e+&8] &f{player}"
+  # 加入公告（需在顶部 modules.announce 打开；仅加入玩家本人可见）
+  # Join announce (requires modules.announce on; visible to the joining player only)
+  join-announce:
+    enabled: true
+    # 显示位置：chat=聊天栏 / title=大标题 / subtitle=小标题 / actionbar=动作栏
+    # Display target: chat / title / subtitle / actionbar
+    mode: "title"
+    text: "&e欢迎新玩家 &f{player}"
+    # 大标题/小标题参数（tick，20tick=1秒）：淡入、停留、淡出
+    # Title/subtitle params (ticks, 20 = 1s): fade-in, stay, fade-out
+    fade-in: 10
+    stay: 60
+    fade-out: 20
+
+# ---------- 默认组 / Default group ----------
+default:
+  join-sound:
+    sound: BLOCK_NOTE_BLOCK_PLING
+    volume: 1.0
+    pitch: 1.0
+  leave-sound:
+    sound: BLOCK_NOTE_BLOCK_BASS
+    volume: 1.0
+    pitch: 1.0
+  join-hologram:
+    enabled: true
+    duration: 15
+    background: true
+    # 加入悬浮默认在头顶 / Join hologram defaults to above the head
+    lines:
+      - text: "&e{player} &f在此加入了游戏！"
+        height: 2.8
+        duration: 15
+      - text: "&7{time}"
+        height: 2.5
+        duration: 15
+  leave-hologram:
+    enabled: true
+    duration: 15
+    background: true
+    # 离开悬浮默认在脚边 / Leave hologram defaults to near the feet
+    lines:
+      - text: "&e{player} &f在此离开了游戏！拜拜~"
+        height: 1.0
+        duration: 15
+      - text: "&7{time}"
+        height: 0.7
+        duration: 15
+  join-message: "&8[&a+&8] &f{player}"
+  leave-message: "&8[&c-&8] &f{player}"
+  # 加入公告（需在顶部 modules.announce 打开；仅加入玩家本人可见）
+  # Join announce (requires modules.announce on; visible to the joining player only)
+  join-announce:
+    enabled: true
+    mode: "chat"
+    text: "&8[&a+&8] &e欢迎 &f{player} &e来到服务器！"
+
+# ---------- 自定义权限组，优先级由上到下 ----------
+# ---------- Custom permission groups, priority from top to bottom ----------
+groups:
+  admin:
+    # 权限节点（需授予后生效）/ Permission node (effective once granted)
+    permission: "joinsuite.group.admin"
+    join-sound:
+      sound: UI_TOAST_CHALLENGE_COMPLETE
+      volume: 1.0
+      pitch: 1.0
+    leave-sound:
+      sound: ENTITY_LIGHTNING_BOLT_THUNDER
+      volume: 1.0
+      pitch: 1.0
+    join-hologram:
+      enabled: true
+      duration: 15
+      background: true
+      lines:
+        - text: "&#FF5555{player} &f降临于此"
+          height: 2.8
+          duration: 15
+        - text: "&#55FFFF{time}"
+          height: 2.5
+          duration: 15
+    leave-hologram:
+      enabled: false
+      duration: 15
+      lines:
+        - text: "&#FF5555{player} &f离开了"
+          height: 1.0
+          duration: 15
+    join-message: "&#FF5555[管理] &f{player} &7加入了游戏"
+    leave-message: "&#FF5555[管理] &f{player} &7离开了游戏"
+    join-announce:
+      enabled: true
+      mode: "subtitle"
+      text: "&#FF5555管理员 {player} 上线了"
+      fade-in: 10
+      stay: 60
+      fade-out: 20
+
+  vip:
+    permission: "joinsuite.group.vip"
+    join-sound:
+      sound: ENTITY_PLAYER_LEVELUP
+      volume: 1.0
+      pitch: 1.2
+    leave-sound:
+      sound: ENTITY_ENDERMAN_TELEPORT
+      volume: 1.0
+      pitch: 1.0
+    join-hologram:
+      enabled: true
+      duration: 15
+      background: true
+      lines:
+        - text: "&#FFAA00VIP &f{player} &7加入了游戏"
+          height: 2.8
+          duration: 15
+        - text: "&#55FFFF{time}"
+          height: 2.5
+          duration: 15
+    leave-hologram:
+      enabled: true
+      duration: 15
+      background: true
+      lines:
+        - text: "&#FFAA00VIP &f{player} &7离开了游戏"
+          height: 1.0
+          duration: 15
+    join-message: "&#FFAA00[VIP] &f{player} &7加入了游戏"
+    leave-message: "&#FFAA00[VIP] &f{player} &7离开了游戏"
+    join-announce:
+      enabled: true
+      mode: "actionbar"
+      text: "&#FFAA00VIP {player} 加入了游戏"

@@ -1,0 +1,20 @@
+# ================= JoinSuite 屏蔽名单存储 / JoinSuite mute list storage =================
+# 配置结构版本（插件自动维护，请勿修改）
+# Config structure version (auto-maintained by the plugin, do not edit)
+config-version: 2
+
+# 存储类型：sqlite 或 mysql / Storage type: sqlite or mysql
+type: sqlite
+
+# 表名前缀（所有数据表共用）/ Table name prefix (shared by all tables)
+table-prefix: "joinsuite_"
+
+# MySQL 配置（type 为 mysql 时生效）/ MySQL settings (used when type is mysql)
+mysql:
+  host: "localhost"
+  port: 3306
+  database: "minecraft"
+  username: "root"
+  password: ""
+  # 是否使用 SSL 连接 / Use SSL connection
+  use-ssl: false

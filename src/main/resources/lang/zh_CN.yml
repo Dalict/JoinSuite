@@ -1,0 +1,19 @@
+# JoinSuite 命令消息
+# 配置结构版本（插件自动维护，请勿修改）
+config-version: 2
+command-usage: "&e/joinsuite reload | mute <玩家> | unmute <玩家> | list"
+no-permission: "&c你没有权限执行此命令。"
+reload-success: "&a配置已重载。"
+
+# 屏蔽
+mute-success: "&a已屏蔽玩家 {player} 的加入/离开效果。"
+mute-already: "&e玩家 {player} 已在屏蔽名单中。"
+unmute-success: "&a已取消屏蔽玩家 {player}。"
+unmute-not-found: "&c玩家 {player} 不在屏蔽名单中。"
+invalid-name: "&c无效的玩家名（仅支持 1-16 位字母/数字/下划线）。"
+
+# 屏蔽名单
+list-header: "&6===== 屏蔽名单 ====="
+list-format: "&f{players}"
+list-separator: "&7, &f"
+list-empty: "&7屏蔽名单为空。"

@@ -1,0 +1,19 @@
+# JoinSuite command messages
+# 配置结构版本（插件自动维护，请勿修改）
+config-version: 2
+command-usage: "&e/joinsuite reload | mute <player> | unmute <player> | list"
+no-permission: "&cYou don't have permission to do that."
+reload-success: "&aConfiguration reloaded."
+
+# Mute
+mute-success: "&aMuted player {player}."
+mute-already: "&ePlayer {player} is already muted."
+unmute-success: "&aUnmuted player {player}."
+unmute-not-found: "&cPlayer {player} is not in the mute list."
+invalid-name: "&cInvalid player name (1-16 letters/digits/underscores only)."
+
+# Mute list
+list-header: "&6===== Mute List ====="
+list-format: "&f{players}"
+list-separator: "&7, &f"
+list-empty: "&7The mute list is empty."

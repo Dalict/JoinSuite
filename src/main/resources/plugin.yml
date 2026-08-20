@@ -1,0 +1,29 @@
+name: JoinSuite
+version: 2.8.1
+main: com.dalict.joinsuite.JoinSuite
+api-version: '1.19'
+author: Dalict
+website: https://github.com/Dalict/JoinSuite
+description: 加入/离开综合管理 - 音效、悬浮文字、自定义消息
+softdepend: [PlaceholderAPI]
+
+commands:
+  joinsuite:
+    description: 重载配置或管理屏蔽名单
+    aliases: [jsuite]
+    usage: |
+      /joinsuite reload - 重载配置
+      /joinsuite mute <玩家名> - 屏蔽该玩家的加入/离开效果
+      /joinsuite unmute <玩家名> - 取消屏蔽
+      /joinsuite list - 查看屏蔽名单
+
+permissions:
+  joinsuite.reload:
+    description: 允许重载配置
+    default: op
+  joinsuite.mute:
+    description: 允许屏蔽/取消屏蔽玩家
+    default: op
+  joinsuite.list:
+    description: 允许查看屏蔽名单
+    default: op

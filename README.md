@@ -1,12 +1,12 @@
 <p align="center">
-<img src="assets/icon-256.png" alt="joinsuite-logo" width="15%"/>
+<img src="https://raw.githubusercontent.com/Dalict/JoinSuite/main/assets/icon-256.png" alt="joinsuite-logo" width="15%"/>
 </p>
 
 <h1 align="center">JoinSuite</h1>
 
 <p align="center">Minecraft 加入/离开综合管理插件：音效 · 悬浮文字 · 消息 · 公告</p>
 
-<p align="center">[English](README_EN.md) | 中文</p>
+<p align="center"><a href="README_EN.md">English</a> | 中文</p>
 
 <div align="center">
     <img src="https://img.shields.io/github/last-commit/Dalict/JoinSuite" alt="GitHub last commit"/>

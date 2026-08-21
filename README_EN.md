@@ -1,12 +1,12 @@
 <p align="center">
-<img src="assets/icon-256.png" alt="joinsuite-logo" width="15%"/>
+<img src="https://raw.githubusercontent.com/Dalict/JoinSuite/main/assets/icon-256.png" alt="joinsuite-logo" width="15%"/>
 </p>
 
 <h1 align="center">JoinSuite</h1>
 
 <p align="center">All-in-one Minecraft join/leave management: sounds, holograms, messages & announcements.</p>
 
-<p align="center">English | [中文](README.md)</p>
+<p align="center">English | <a href="README.md">中文</a></p>
 
 <div align="center">
     <img src="https://img.shields.io/github/last-commit/Dalict/JoinSuite" alt="GitHub last commit"/>

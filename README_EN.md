@@ -1,6 +1,28 @@
-# JoinSuite - All-in-one Minecraft Join/Leave Management Plugin
+<p align="center">
+<img src="assets/icon-256.png" alt="joinsuite-logo" width="15%"/>
+</p>
 
-English | [中文](README.md)
+<h1 align="center">JoinSuite</h1>
+
+<p align="center">All-in-one Minecraft join/leave management: sounds, holograms, messages & announcements.</p>
+
+<p align="center">English | [中文](README.md)</p>
+
+<div align="center">
+    <img src="https://img.shields.io/github/last-commit/Dalict/JoinSuite" alt="GitHub last commit"/>
+    <img src="https://img.shields.io/github/commit-activity/w/Dalict/JoinSuite" alt="GitHub commit activity"/>
+    <img src="https://img.shields.io/github/contributors/Dalict/JoinSuite" alt="GitHub contributors"/>
+    <br>
+    <img src="https://img.shields.io/github/languages/code-size/Dalict/JoinSuite" alt="GitHub code size in bytes"/>
+    <img src="https://img.shields.io/endpoint?url=https://ghloc.vercel.app/api/Dalict/JoinSuite/badge?filter=.java$&label=lines%20of%20code&color=blue" alt="GitHub lines of code"/>
+    <img src="https://img.shields.io/github/license/Dalict/JoinSuite" alt="License"/>
+    <br>
+    <img src="https://img.shields.io/badge/Paper-1.19.4%2B-857e00?logo=papermc" alt="Paper"/>
+    <img src="https://img.shields.io/badge/Java-17%2B-orange?logo=openjdk" alt="Java"/>
+    <img src="https://img.shields.io/badge/MC-1.19.4%2B-green?logo=minecraft" alt="Minecraft"/>
+</div>
+
+---
 
 ## Introduction
 A lightweight **Paper-family** (Paper / Purpur / Pufferfish) 1.19.4+ plugin that manages **sounds, holograms, custom messages and welcome announcements** for player joins and leaves — all permission-group based with independent module toggles. Successor to [JoinLeaveSound](https://github.com/Dalict/JoinLeaveSound).

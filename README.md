@@ -1,6 +1,28 @@
-# JoinSuite - Minecraft 加入/离开综合管理插件
+<p align="center">
+<img src="assets/icon-256.png" alt="joinsuite-logo" width="15%"/>
+</p>
 
-[English](README_EN.md) | 中文
+<h1 align="center">JoinSuite</h1>
+
+<p align="center">Minecraft 加入/离开综合管理插件：音效 · 悬浮文字 · 消息 · 公告</p>
+
+<p align="center">[English](README_EN.md) | 中文</p>
+
+<div align="center">
+    <img src="https://img.shields.io/github/last-commit/Dalict/JoinSuite" alt="GitHub last commit"/>
+    <img src="https://img.shields.io/github/commit-activity/w/Dalict/JoinSuite" alt="GitHub commit activity"/>
+    <img src="https://img.shields.io/github/contributors/Dalict/JoinSuite" alt="GitHub contributors"/>
+    <br>
+    <img src="https://img.shields.io/github/languages/code-size/Dalict/JoinSuite" alt="GitHub code size in bytes"/>
+    <img src="https://img.shields.io/endpoint?url=https://ghloc.vercel.app/api/Dalict/JoinSuite/badge?filter=.java$&label=lines%20of%20code&color=blue" alt="GitHub lines of code"/>
+    <img src="https://img.shields.io/github/license/Dalict/JoinSuite" alt="License"/>
+    <br>
+    <img src="https://img.shields.io/badge/Paper-1.19.4%2B-857e00?logo=papermc" alt="Paper"/>
+    <img src="https://img.shields.io/badge/Java-17%2B-orange?logo=openjdk" alt="Java"/>
+    <img src="https://img.shields.io/badge/MC-1.19.4%2B-green?logo=minecraft" alt="Minecraft"/>
+</div>
+
+---
 
 ## 简介
 轻量级 **Paper 系**（Paper / Purpur / Pufferfish）1.19.4+ 插件，将玩家加入/离开服务器的 **音效、悬浮文字、自定义消息、欢迎公告** 一站式管理，全部支持权限分组与独立模块开关。前身为 [JoinLeaveSound](https://github.com/Dalict/JoinLeaveSound)。

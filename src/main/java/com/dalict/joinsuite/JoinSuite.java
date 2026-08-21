@@ -60,9 +60,11 @@ public class JoinSuite extends JavaPlugin {
 
     private HologramManager hologramManager;
     private MuteStore muteStore;
+    private boolean paperLike;
 
     @Override
     public void onEnable() {
+        paperLike = detectPaperLike();
         ConfigUpdater.update(this, "config.yml", CONFIG_VERSION);
         saveDefaultConfig();
         loadFeatureFlags();
@@ -88,7 +90,7 @@ public class JoinSuite extends JavaPlugin {
             getLogger().info("PlaceholderAPI detected: PAPI placeholders enabled in texts, %joinsuite_*% placeholders registered.");
         }
 
-        getLogger().info("JoinSuite 2.8.1 enabled!");
+        getLogger().info("JoinSuite 2.9.0 enabled!");
     }
 
     @Override
@@ -336,6 +338,18 @@ public class JoinSuite extends JavaPlugin {
             }
         }
         return null;
+    }
+
+    /** 是否为 Paper 系服务端（Player 实现了 Adventure Audience）；纯 Spigot 为 false */
+    public boolean isPaperLike() { return paperLike; }
+
+    private boolean detectPaperLike() {
+        try {
+            return net.kyori.adventure.audience.Audience.class
+                    .isAssignableFrom(org.bukkit.entity.Player.class);
+        } catch (Throwable t) {
+            return false;
+        }
     }
 
     public HologramManager getHologramManager() { return hologramManager; }

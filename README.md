@@ -17,7 +17,7 @@
     <img src="https://img.shields.io/endpoint?url=https://ghloc.vercel.app/api/Dalict/JoinSuite/badge?filter=.java$&label=lines%20of%20code&color=blue" alt="GitHub lines of code"/>
     <img src="https://img.shields.io/github/license/Dalict/JoinSuite" alt="License"/>
     <br>
-    <img src="https://img.shields.io/badge/Paper-1.19.4%2B-857e00?logo=papermc" alt="Paper"/>
+    <img src="https://img.shields.io/badge/Spigot%20%2F%20Paper-1.19.4%2B-857e00" alt="Server"/>
     <img src="https://img.shields.io/badge/Java-17%2B-orange?logo=openjdk" alt="Java"/>
     <img src="https://img.shields.io/badge/MC-1.19.4%2B-green?logo=minecraft" alt="Minecraft"/>
 </div>
@@ -25,7 +25,7 @@
 ---
 
 ## 简介
-轻量级 **Paper 系**（Paper / Purpur / Pufferfish）1.19.4+ 插件，将玩家加入/离开服务器的 **音效、悬浮文字、自定义消息、欢迎公告** 一站式管理，全部支持权限分组与独立模块开关。前身为 [JoinLeaveSound](https://github.com/Dalict/JoinLeaveSound)。
+轻量级 **Spigot / Paper 系**（Paper / Purpur / Pufferfish / Spigot）1.19.4+ 插件，将玩家加入/离开服务器的 **音效、悬浮文字、自定义消息、欢迎公告** 一站式管理，全部支持权限分组与独立模块开关。前身为 [JoinLeaveSound](https://github.com/Dalict/JoinLeaveSound)。
 
 ---
 
@@ -66,7 +66,7 @@
 2. 重启服务器。
 3. 编辑 `plugins/JoinSuite/` 下的配置文件进行自定义，`/joinsuite reload` 热重载。
 
-> 要求：Paper 系服务端 1.19.4+（Paper / Purpur / Pufferfish），Java 17+。不支持纯 Spigot。
+> 要求：Spigot / Paper 系 1.19.4+，Java 17+。Paper 系走原生 Adventure API；纯 Spigot 自动切换兼容模式，功能完整。
 
 ---
 
@@ -214,7 +214,7 @@ mysql:
 ## 常见问题
 
 **Q：支持哪些服务端？**
-A：Paper / Purpur / Pufferfish 等 Paper 系 1.19.4+。纯 Spigot 不支持（公告与消息使用 Adventure API）。
+A：Spigot / Paper 系 1.19.4+。Paper 系使用 Adventure，纯 Spigot 自动回落旧式 API，全功能可用。
 
 **Q：悬浮文字会残留在世界里或写进存档吗？**
 A：不会。实体设置了非持久化标记，区块卸载保存时直接丢弃；另有标签清扫机制兜底。

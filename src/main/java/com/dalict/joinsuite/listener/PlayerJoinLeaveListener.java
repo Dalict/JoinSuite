@@ -8,6 +8,8 @@ import com.dalict.joinsuite.hologram.HologramConfig;
 import com.dalict.joinsuite.util.ColorUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -77,7 +79,7 @@ public class PlayerJoinLeaveListener implements Listener {
         if (msgModule) {
             event.setJoinMessage(null);
             if (message != null && !message.isEmpty()) {
-                broadcast(format(message, player));
+                broadcast(message, player);
             }
         }
 
@@ -135,7 +137,7 @@ public class PlayerJoinLeaveListener implements Listener {
         if (msgModule) {
             event.setQuitMessage(null);
             if (message != null && !message.isEmpty()) {
-                broadcast(format(message, player));
+                broadcast(message, player);
             }
         }
 
@@ -190,26 +192,47 @@ public class PlayerJoinLeaveListener implements Listener {
         return true;
     }
 
-    /** 加入公告：chat=聊天栏 / title=大标题 / subtitle=小标题 / actionbar=动作栏，仅发给加入玩家本人 */
+    /** 加入公告：chat=聊天栏 / title=大标题 / subtitle=小标题 / actionbar=动作栏，仅发给加入玩家本人。
+     *  Paper 系走 Adventure；纯 Spigot 走旧式 sendTitle / BungeeCord 动作栏 API。 */
+    @SuppressWarnings("deprecation")
     private void sendAnnounce(AnnounceConfig announce, Player player) {
+        String raw = formatRaw(announce.text, player);
+        boolean paper = plugin.isPaperLike();
         switch (announce.mode) {
             case "title":
             case "subtitle": {
-                Component text = format(announce.text, player);
-                Component main = announce.mode.equals("title") ? text : Component.empty();
-                Component sub = announce.mode.equals("subtitle") ? text : Component.empty();
-                Title title = Title.title(main, sub, Title.Times.times(
-                        Duration.ofMillis(announce.fadeIn * 50L),
-                        Duration.ofMillis(announce.stay * 50L),
-                        Duration.ofMillis(announce.fadeOut * 50L)));
-                player.showTitle(title);
+                if (paper) {
+                    Component text = ColorUtil.component(raw);
+                    Component main = announce.mode.equals("title") ? text : Component.empty();
+                    Component sub = announce.mode.equals("subtitle") ? text : Component.empty();
+                    Title title = Title.title(main, sub, Title.Times.times(
+                            Duration.ofMillis(announce.fadeIn * 50L),
+                            Duration.ofMillis(announce.stay * 50L),
+                            Duration.ofMillis(announce.fadeOut * 50L)));
+                    player.showTitle(title);
+                } else {
+                    String text = ColorUtil.displayText(raw);
+                    player.sendTitle(
+                            announce.mode.equals("title") ? text : "",
+                            announce.mode.equals("subtitle") ? text : "",
+                            announce.fadeIn, announce.stay, announce.fadeOut);
+                }
                 break;
             }
             case "actionbar":
-                player.sendActionBar(format(announce.text, player));
+                if (paper) {
+                    player.sendActionBar(ColorUtil.component(raw));
+                } else {
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+                            TextComponent.fromLegacyText(ColorUtil.displayText(raw)));
+                }
                 break;
             default: // chat
-                player.sendMessage(format(announce.text, player));
+                if (paper) {
+                    player.sendMessage(format(announce.text, player));
+                } else {
+                    player.sendMessage(ColorUtil.displayText(raw));
+                }
                 break;
         }
         debug("Announce (" + announce.mode + ") sent to " + player.getName());
@@ -234,17 +257,26 @@ public class PlayerJoinLeaveListener implements Listener {
         return result;
     }
 
-    /** 占位符替换 + 真彩色组件 */
+    /** 占位符替换 + 真彩色组件（仅 Paper 系使用） */
     private Component format(String text, Player player) {
         return ColorUtil.component(formatRaw(text, player));
     }
 
-    /** 全服广播：所有在线玩家 + 控制台 */
-    private void broadcast(Component component) {
-        for (Player online : plugin.getServer().getOnlinePlayers()) {
-            online.sendMessage(component);
+    /** 全服广播：Paper 系走 Adventure 组件；纯 Spigot 走 legacy 字符串（§x 真彩色同样生效） */
+    private void broadcast(String text, Player player) {
+        if (plugin.isPaperLike()) {
+            Component component = format(text, player);
+            for (Player online : plugin.getServer().getOnlinePlayers()) {
+                online.sendMessage(component);
+            }
+            Bukkit.getConsoleSender().sendMessage(component);
+        } else {
+            String legacy = ColorUtil.displayText(formatRaw(text, player));
+            for (Player online : plugin.getServer().getOnlinePlayers()) {
+                online.sendMessage(legacy);
+            }
+            Bukkit.getConsoleSender().sendMessage(legacy);
         }
-        Bukkit.getConsoleSender().sendMessage(component);
     }
 
     private void playGlobalSound(SoundConfig config) {

@@ -17,7 +17,7 @@
     <img src="https://img.shields.io/endpoint?url=https://ghloc.vercel.app/api/Dalict/JoinSuite/badge?filter=.java$&label=lines%20of%20code&color=blue" alt="GitHub lines of code"/>
     <img src="https://img.shields.io/github/license/Dalict/JoinSuite" alt="License"/>
     <br>
-    <img src="https://img.shields.io/badge/Paper-1.19.4%2B-857e00?logo=papermc" alt="Paper"/>
+    <img src="https://img.shields.io/badge/Spigot%20%2F%20Paper-1.19.4%2B-857e00" alt="Server"/>
     <img src="https://img.shields.io/badge/Java-17%2B-orange?logo=openjdk" alt="Java"/>
     <img src="https://img.shields.io/badge/MC-1.19.4%2B-green?logo=minecraft" alt="Minecraft"/>
 </div>
@@ -25,7 +25,7 @@
 ---
 
 ## Introduction
-A lightweight **Paper-family** (Paper / Purpur / Pufferfish) 1.19.4+ plugin that manages **sounds, holograms, custom messages and welcome announcements** for player joins and leaves — all permission-group based with independent module toggles. Successor to [JoinLeaveSound](https://github.com/Dalict/JoinLeaveSound).
+A lightweight **Spigot / Paper-family** (Paper / Purpur / Pufferfish / Spigot) 1.19.4+ plugin that manages **sounds, holograms, custom messages and welcome announcements** for player joins and leaves — all permission-group based with independent module toggles. Successor to [JoinLeaveSound](https://github.com/Dalict/JoinLeaveSound).
 
 ---
 
@@ -66,7 +66,7 @@ A lightweight **Paper-family** (Paper / Purpur / Pufferfish) 1.19.4+ plugin that
 2. Restart the server.
 3. Customize the files under `plugins/JoinSuite/`, then `/joinsuite reload`.
 
-> Requires a Paper-family server 1.19.4+ (Paper / Purpur / Pufferfish), Java 17+. Plain Spigot is not supported.
+> Requires Spigot / Paper-family 1.19.4+, Java 17+. Paper-family servers use the native Adventure API; plain Spigot automatically falls back to legacy APIs with full functionality.
 
 ---
 
@@ -214,7 +214,7 @@ Ships with `zh_CN` / `en_US`. Change `language` in `config.yml` and reload; fall
 ## FAQ
 
 **Q: Which servers are supported?**
-A: Paper-family 1.19.4+ (Paper / Purpur / Pufferfish). Plain Spigot is not supported (messages/announcements use the Adventure API).
+A: Spigot / Paper-family 1.19.4+. Paper-family uses Adventure; plain Spigot falls back to legacy APIs automatically — all features work.
 
 **Q: Can holograms leak into the world or the save?**
 A: No. Entities are marked non-persistent, discarded on chunk unload, with a tag-sweep fallback.

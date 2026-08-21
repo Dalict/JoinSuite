@@ -9,6 +9,7 @@
 <p align="center">English | <a href="README.md">中文</a></p>
 
 <div align="center">
+    <img src="https://img.shields.io/github/v/release/Dalict/JoinSuite?color=blue&label=release" alt="Release"/>
     <img src="https://img.shields.io/github/last-commit/Dalict/JoinSuite" alt="GitHub last commit"/>
     <img src="https://img.shields.io/github/commit-activity/w/Dalict/JoinSuite" alt="GitHub commit activity"/>
     <img src="https://img.shields.io/github/contributors/Dalict/JoinSuite" alt="GitHub contributors"/>

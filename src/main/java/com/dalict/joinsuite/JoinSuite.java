@@ -300,7 +300,9 @@ public class JoinSuite extends JavaPlugin {
         if (!legacyText.isEmpty()) {
             title = subtitle = actionbar = message = null;
             for (String m : ann.getString("mode", "chat").split(",")) {
-                switch (m.trim().toLowerCase()) {
+                m = m.trim().toLowerCase();
+                if (m.isEmpty()) continue;
+                switch (m) {
                     case "title": title = legacyText; break;
                     case "subtitle": subtitle = legacyText; break;
                     case "actionbar": actionbar = legacyText; break;

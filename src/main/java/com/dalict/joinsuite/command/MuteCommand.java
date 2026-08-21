@@ -68,9 +68,8 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
                 Player online = Bukkit.getPlayerExact(targetName);
 
                 if (sub.equals("mute")) {
-                    // 在线玩家记录真实 uuid；离线玩家仅按名字
-                    if (plugin.getMuteStore().mute(targetName,
-                            online != null ? online.getUniqueId().toString() : null)) {
+                    // 在线玩家记录真实 uuid；离线玩家在离线服上可由名字推算离线 uuid（正版服记空，上线后补全）
+                    if (plugin.getMuteStore().mute(targetName, resolveUuid(online, targetName))) {
                         sender.sendMessage(plugin.getMessage("mute-success").replace("{player}", targetName));
                     } else {
                         sender.sendMessage(plugin.getMessage("mute-already").replace("{player}", targetName));
@@ -88,6 +87,16 @@ public class MuteCommand implements CommandExecutor, TabCompleter {
                 break;
         }
         return true;
+    }
+
+    /** 取屏蔽目标 uuid：在线直接取；离线目标在离线服上按名字推算离线 uuid，否则返回 null（上线后补全） */
+    private String resolveUuid(Player online, String name) {
+        if (online != null) return online.getUniqueId().toString();
+        if (!Bukkit.getOnlineMode()) {
+            return java.util.UUID.nameUUIDFromBytes(
+                    ("OfflinePlayer:" + name).getBytes(java.nio.charset.StandardCharsets.UTF_8)).toString();
+        }
+        return null;
     }
 
     @Override

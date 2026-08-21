@@ -88,7 +88,7 @@ public class JoinSuite extends JavaPlugin {
             getLogger().info("PlaceholderAPI detected: PAPI placeholders enabled in texts, %joinsuite_*% placeholders registered.");
         }
 
-        getLogger().info("JoinSuite 2.8.2 enabled!");
+        getLogger().info("JoinSuite 2.8.1 enabled!");
     }
 
     @Override

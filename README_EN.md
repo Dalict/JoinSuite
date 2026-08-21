@@ -52,7 +52,7 @@ A lightweight **Spigot / Paper-family** (Paper / Purpur / Pufferfish / Spigot) 1
   - Never written to world save; discarded on chunk unload, **zero residue**; legacy leftovers swept on startup / chunk load
   - One hologram set per player: a new hologram instantly replaces the old one — join/leave never displayed at the same time, no stacking
 - **Custom messages**: replace vanilla join/leave messages (disabled by default), broadcast server-wide
-- **Join announcement** (disabled by default): visible to the joining player only — chat / title / subtitle / action bar, **combinable (comma-separated)**, with fade-in, stay and fade-out for titles
+- **Join announcement** (disabled by default): visible to the joining player only — title / subtitle / action bar / chat message, **each with its own independent text** (empty = hidden, multiple can show at once), with fade-in, stay and fade-out for titles
 - **Mute list**: SQLite / MySQL storage (`database.yml`), stores case-preserved names + UUIDs; renames synced automatically; legacy `muted-players.yml` migrated automatically
 - **PlaceholderAPI soft-depend**: any PAPI placeholder usable in texts; provides `%joinsuite_group%`, `%joinsuite_muted%`, `%joinsuite_time%`
 - **LuckPerms friendly**: all permission nodes (including group nodes) auto-registered, tab-completable in LP
@@ -139,7 +139,10 @@ newbie:
         duration: 15
   join-announce:
     enabled: true
-    mode: "title"        # multiple allowed, comma-separated, e.g. "title,actionbar"
+    title: "&eWelcome &f{player}"  # empty "" = hidden
+    subtitle: ""                  # empty "" = hidden
+    actionbar: ""
+    message: ""
     text: "&e欢迎新玩家 &f{player}"
     fade-in: 10          # title/subtitle only (ticks)
     stay: 60

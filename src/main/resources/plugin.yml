@@ -1,5 +1,5 @@
 name: JoinSuite
-version: 2.10.0
+version: 2.11.0
 main: com.dalict.joinsuite.JoinSuite
 api-version: '1.19'
 author: Dalict

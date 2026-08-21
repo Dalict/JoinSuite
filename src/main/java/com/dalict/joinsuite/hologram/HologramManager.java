@@ -32,22 +32,26 @@ public class HologramManager implements Listener {
     public static final String HOLO_TAG = "joinsuite_hologram";
 
     private final JoinSuite plugin;
-    /** 每个玩家当前活跃的悬浮批次 */
-    private final Map<UUID, List<TextDisplay>> activeByPlayer = new HashMap<>();
+    /** 每个玩家两条独立轨道的活跃悬浮：
+     *  newbie = 新玩家首次加入悬浮（独立存续，不被普通悬浮顶掉）；
+     *  normal = 普通加入/离开悬浮（同轨道内互相替换，绝不堆叠/同屏）。 */
+    private final Map<UUID, List<TextDisplay>> newbieByPlayer = new HashMap<>();
+    private final Map<UUID, List<TextDisplay>> normalByPlayer = new HashMap<>();
 
     public HologramManager(JoinSuite plugin) {
         this.plugin = plugin;
     }
 
-    /** 为玩家生成一组悬浮文字（自动替换该玩家仍在显示的旧悬浮），text 已由调用方完成占位符替换。
+    /** 为玩家生成一组悬浮文字（text 已由调用方完成占位符替换）。
+     *  只替换同轨道的旧悬浮：普通加入/离开互相顶掉；新玩家首次加入悬浮与普通悬浮互不影响、可共存。
      *  每行按自己的 duration 独立计时消失。 */
-    public void spawn(Player player, HologramConfig config) {
+    public void spawn(Player player, HologramConfig config, boolean newbie) {
         if (config == null || !config.isValid()) return;
 
-        // 立即移除该玩家旧的悬浮（防止堆叠，以及加入/离开悬浮同屏）
-        removePlayerHologram(player.getUniqueId());
-
         UUID uuid = player.getUniqueId();
+        Map<UUID, List<TextDisplay>> track = newbie ? newbieByPlayer : normalByPlayer;
+        removeTrack(track, uuid);
+
         List<TextDisplay> displays = new ArrayList<>();
         for (HologramConfig.HologramLine line : config.lines) {
             Location loc = player.getLocation().clone().add(0, line.height, 0);
@@ -71,23 +75,32 @@ public class HologramManager implements Listener {
             plugin.getServer().getScheduler().runTaskLater(
                     plugin, () -> expireOne(uuid, display), ticks);
         }
-        activeByPlayer.put(uuid, displays);
+        track.put(uuid, displays);
     }
 
-    /** 某一行到期：从该玩家的批次中移除单个实体（被新悬浮替换过则实体已删，直接跳过） */
+    /** 某一行到期：从两条轨道中移除该实体（被新悬浮替换过的实体已删，直接跳过） */
     private void expireOne(UUID uuid, TextDisplay display) {
-        List<TextDisplay> list = activeByPlayer.get(uuid);
-        if (list != null) {
-            list.remove(display);
-            if (list.isEmpty()) activeByPlayer.remove(uuid);
-        }
+        removeFromTrack(newbieByPlayer, uuid, display);
+        removeFromTrack(normalByPlayer, uuid, display);
         if (!display.isDead()) display.remove();
     }
 
-    /** 立即移除某玩家当前的全部悬浮 */
-    public void removePlayerHologram(UUID uuid) {
-        List<TextDisplay> displays = activeByPlayer.remove(uuid);
+    private void removeFromTrack(Map<UUID, List<TextDisplay>> track, UUID uuid, TextDisplay display) {
+        List<TextDisplay> list = track.get(uuid);
+        if (list == null) return;
+        list.remove(display);
+        if (list.isEmpty()) track.remove(uuid);
+    }
+
+    private void removeTrack(Map<UUID, List<TextDisplay>> track, UUID uuid) {
+        List<TextDisplay> displays = track.remove(uuid);
         if (displays != null) removeEntities(displays);
+    }
+
+    /** 立即移除某玩家当前的全部悬浮（两条轨道一起） */
+    public void removePlayerHologram(UUID uuid) {
+        removeTrack(newbieByPlayer, uuid);
+        removeTrack(normalByPlayer, uuid);
     }
 
     private void removeEntities(List<TextDisplay> displays) {
@@ -98,10 +111,14 @@ public class HologramManager implements Listener {
 
     /** 移除所有活跃悬浮（重载/禁用时调用） */
     public void removeAllActive() {
-        for (List<TextDisplay> displays : activeByPlayer.values()) {
+        for (List<TextDisplay> displays : newbieByPlayer.values()) {
             removeEntities(displays);
         }
-        activeByPlayer.clear();
+        for (List<TextDisplay> displays : normalByPlayer.values()) {
+            removeEntities(displays);
+        }
+        newbieByPlayer.clear();
+        normalByPlayer.clear();
     }
 
     /** 启动时清理已加载区块中的残留（旧版本遗留、异常关闭） */

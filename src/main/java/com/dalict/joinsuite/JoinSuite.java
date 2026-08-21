@@ -20,12 +20,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class JoinSuite extends JavaPlugin {
 
@@ -93,7 +90,7 @@ public class JoinSuite extends JavaPlugin {
             getLogger().info("PlaceholderAPI detected: PAPI placeholders enabled in texts, %joinsuite_*% placeholders registered.");
         }
 
-        getLogger().info("JoinSuite 2.10.0 enabled!");
+        getLogger().info("JoinSuite 2.11.0 enabled!");
     }
 
     @Override
@@ -286,32 +283,41 @@ public class JoinSuite extends JavaPlugin {
         return new HologramConfig(defaultDuration, lines, holoSection.getBoolean("background", true));
     }
 
-    /** 加载加入公告配置（join-announce 段）。mode 支持逗号分隔多选，如 "title,actionbar" */
+    /** 加载加入公告配置（join-announce 段）。
+     *  title/subtitle/actionbar/message 四种文本各自独立，留空或省略 = 不显示该类型，可多类型同屏。
+     *  兼容旧结构（mode + text 单一文本）：存在 text 键时按旧结构映射到对应类型。 */
     private AnnounceConfig loadAnnounceConfig(ConfigurationSection section, String path) {
         ConfigurationSection ann = section.getConfigurationSection(path);
         if (ann == null || !ann.getBoolean("enabled", true)) return null;
 
-        String text = ann.getString("text", "");
-        if (text.isEmpty()) return null;
+        String title = emptyToNull(ann.getString("title", null));
+        String subtitle = emptyToNull(ann.getString("subtitle", null));
+        String actionbar = emptyToNull(ann.getString("actionbar", null));
+        String message = emptyToNull(ann.getString("message", null));
 
-        Set<String> known = new HashSet<>(Arrays.asList("chat", "title", "subtitle", "actionbar"));
-        List<String> modes = new ArrayList<>();
-        for (String raw : ann.getString("mode", "chat").split(",")) {
-            String mode = raw.trim().toLowerCase();
-            if (mode.isEmpty()) continue;
-            if (known.contains(mode)) {
-                modes.add(mode);
-            } else {
-                getLogger().warning("Unknown join-announce mode '" + raw + "' in " + path
-                        + " (valid: chat, title, subtitle, actionbar)");
+        // 旧结构兼容：mode + text
+        String legacyText = ann.getString("text", "");
+        if (!legacyText.isEmpty()) {
+            title = subtitle = actionbar = message = null;
+            for (String m : ann.getString("mode", "chat").split(",")) {
+                switch (m.trim().toLowerCase()) {
+                    case "title": title = legacyText; break;
+                    case "subtitle": subtitle = legacyText; break;
+                    case "actionbar": actionbar = legacyText; break;
+                    default: message = legacyText; break;
+                }
             }
         }
-        if (modes.isEmpty()) modes.add("chat");
+        if (title == null && subtitle == null && actionbar == null && message == null) return null;
 
-        return new AnnounceConfig(modes, text,
+        return new AnnounceConfig(title, subtitle, actionbar, message,
                 ann.getInt("fade-in", 10),
                 ann.getInt("stay", 60),
                 ann.getInt("fade-out", 10));
+    }
+
+    private String emptyToNull(String s) {
+        return s == null || s.trim().isEmpty() ? null : s;
     }
 
     // ---------- Getters ----------
@@ -417,17 +423,22 @@ public class JoinSuite extends JavaPlugin {
         }
     }
 
-    /** 加入公告配置：modes 为显示类型列表（chat=聊天栏 / title=大标题 / subtitle=小标题 / actionbar=动作栏），可多选同时生效 */
+    /** 加入公告配置：四种文本各自独立（null = 不显示该类型，可多类型同屏），title/subtitle 共用淡入淡出参数 */
     public static class AnnounceConfig {
-        public final List<String> modes;
-        public final String text;
+        public final String title;     // 大标题
+        public final String subtitle;  // 小标题
+        public final String actionbar; // 动作栏
+        public final String message;   // 聊天消息
         public final int fadeIn;  // 仅 title/subtitle 生效（tick）
         public final int stay;
         public final int fadeOut;
 
-        public AnnounceConfig(List<String> modes, String text, int fadeIn, int stay, int fadeOut) {
-            this.modes = modes;
-            this.text = text;
+        public AnnounceConfig(String title, String subtitle, String actionbar, String message,
+                              int fadeIn, int stay, int fadeOut) {
+            this.title = title;
+            this.subtitle = subtitle;
+            this.actionbar = actionbar;
+            this.message = message;
             this.fadeIn = fadeIn;
             this.stay = stay;
             this.fadeOut = fadeOut;

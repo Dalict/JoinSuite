@@ -77,23 +77,24 @@ newbie:
     # 每行：text 内容 / height 高度 / duration 该行独立持续秒数（可省略=用顶层值）
     # Each line: text / height / duration in seconds (optional, falls back to top-level)
     lines:
-      - text: "&e{player} &f在这个位置首次加入这里！"
+      - text: "&f{player} 在这里首次上线！"
         height: 2.8
-        duration: 15
+        duration: 30
       - text: "&7{time}"
         height: 2.5
-        duration: 15
+        duration: 30
   join-message: "&8[&e+&8] &f{player}"
   # 加入公告（需在顶部 modules.announce 打开；仅加入玩家本人可见）
   # Join announce (requires modules.announce on; visible to the joining player only)
   join-announce:
     enabled: true
-    # 显示位置：chat=聊天栏 / title=大标题 / subtitle=小标题 / actionbar=动作栏
-    # 可多选，逗号分隔，如 "title,actionbar"（同时显示）
-    # Display targets: chat / title / subtitle / actionbar;
-    # multiple allowed, comma-separated, e.g. "title,actionbar"
-    mode: "title"
-    text: "&e欢迎新玩家 &f{player}"
+    # 大标题/小标题/动作栏/聊天消息：四种文本各自独立，留空 "" 或省略 = 不显示该类型
+    # Title / subtitle / action bar / chat message: independent texts;
+    # empty "" (or omitted) = that type is not shown
+    title: "&e欢迎新玩家 &f{player}"
+    subtitle: "&7祝你在服务器玩得愉快！"
+    actionbar: ""
+    message: ""
     # 大标题/小标题参数（tick，20tick=1秒）：淡入、停留、淡出
     # Title/subtitle params (ticks, 20 = 1s): fade-in, stay, fade-out
     fade-in: 10
@@ -116,7 +117,7 @@ default:
     background: true
     # 加入悬浮默认在头顶 / Join hologram defaults to above the head
     lines:
-      - text: "&e{player} &f在此加入了游戏！"
+      - text: "&f{player} 在这里上线了！"
         height: 2.8
         duration: 15
       - text: "&7{time}"
@@ -128,7 +129,7 @@ default:
     background: true
     # 离开悬浮默认在脚边 / Leave hologram defaults to near the feet
     lines:
-      - text: "&e{player} &f在此离开了游戏！拜拜~"
+      - text: "&f{player} 在这里下线了！拜拜~"
         height: 1.0
         duration: 15
       - text: "&7{time}"
@@ -140,8 +141,10 @@ default:
   # Join announce (requires modules.announce on; visible to the joining player only)
   join-announce:
     enabled: true
-    mode: "chat"
-    text: "&8[&a+&8] &e欢迎 &f{player} &e来到服务器！"
+    title: ""
+    subtitle: ""
+    actionbar: ""
+    message: "&8[&a+&8] &e欢迎 &f{player} &e来到服务器！"
 
 # ---------- 自定义权限组，优先级由上到下 ----------
 # ---------- Custom permission groups, priority from top to bottom ----------
@@ -179,8 +182,10 @@ groups:
     leave-message: "&#FF5555[管理] &f{player} &7离开了游戏"
     join-announce:
       enabled: true
-      mode: "subtitle,actionbar"
-      text: "&#FF5555管理员 {player} 上线了"
+      title: "&#FF5555管理员 {player} 上线了"
+      subtitle: ""
+      actionbar: "&#FF5555Staff Online"
+      message: ""
       fade-in: 10
       stay: 60
       fade-out: 20
@@ -218,5 +223,7 @@ groups:
     leave-message: "&#FFAA00[VIP] &f{player} &7离开了游戏"
     join-announce:
       enabled: true
-      mode: "actionbar"
-      text: "&#FFAA00VIP {player} 加入了游戏"
+      title: ""
+      subtitle: "&#FFAA00VIP {player} 加入了游戏"
+      actionbar: "&#FFAA00欢迎回来，尊贵的 VIP"
+      message: ""

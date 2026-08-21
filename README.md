@@ -52,7 +52,7 @@
   - 不写入存档，区块卸载自动丢弃，**绝无残留**；启动/区块加载时自动清扫历史残留
   - 每个玩家同一时间只有一组悬浮：新悬浮立即替换旧的，加入/离开绝不同屏、不堆叠
 - **自定义消息**：替换原版加入/离开消息（默认关闭），全服广播
-- **加入公告**（默认关闭）：仅加入玩家本人可见，支持聊天栏 / 大标题 / 小标题 / 动作栏，**可任意组合（逗号分隔）同时生效**，标题可调淡入、停留、淡出
+- **加入公告**（默认关闭）：仅加入玩家本人可见，大标题/小标题/动作栏/聊天消息**四种文本各自独立配置**（留空不显示该类型，可同屏多类型），标题可调淡入、停留、淡出
 - **屏蔽名单**：SQLite / MySQL 存储（`database.yml`），记录玩家名（保留大小写）与 UUID；改名自动同步；旧版 `muted-players.yml` 自动迁移
 - **PlaceholderAPI 软依赖**：文本中可用任意 PAPI 占位符；对外提供 `%joinsuite_group%` `%joinsuite_muted%` `%joinsuite_time%`
 - **LuckPerms 友好**：所有权限节点（含分组节点）自动注册，LP 中可 Tab 补全
@@ -139,7 +139,10 @@ newbie:
         duration: 15
   join-announce:
     enabled: true
-    mode: "title"        # 可多选逗号分隔 / multiple allowed, e.g. "title,actionbar"
+    title: "&e欢迎 &f{player}"   # 大标题，留空 "" 不显示
+    subtitle: ""                  # 小标题
+    actionbar: ""                 # 动作栏
+    message: ""                   # 聊天消息
     text: "&e欢迎新玩家 &f{player}"
     fade-in: 10          # 仅 title/subtitle 生效（tick）
     stay: 60

@@ -192,50 +192,52 @@ public class PlayerJoinLeaveListener implements Listener {
         return true;
     }
 
-    /** 加入公告：chat=聊天栏 / title=大标题 / subtitle=小标题 / actionbar=动作栏，仅发给加入玩家本人。
+    /** 加入公告：按 mode 列表逐个发送（chat=聊天栏 / title=大标题 / subtitle=小标题 / actionbar=动作栏），仅发给加入玩家本人。
      *  Paper 系走 Adventure；纯 Spigot 走旧式 sendTitle / BungeeCord 动作栏 API。 */
     @SuppressWarnings("deprecation")
     private void sendAnnounce(AnnounceConfig announce, Player player) {
         String raw = formatRaw(announce.text, player);
         boolean paper = plugin.isPaperLike();
-        switch (announce.mode) {
-            case "title":
-            case "subtitle": {
-                if (paper) {
-                    Component text = ColorUtil.component(raw);
-                    Component main = announce.mode.equals("title") ? text : Component.empty();
-                    Component sub = announce.mode.equals("subtitle") ? text : Component.empty();
-                    Title title = Title.title(main, sub, Title.Times.times(
-                            Duration.ofMillis(announce.fadeIn * 50L),
-                            Duration.ofMillis(announce.stay * 50L),
-                            Duration.ofMillis(announce.fadeOut * 50L)));
-                    player.showTitle(title);
-                } else {
-                    String text = ColorUtil.displayText(raw);
-                    player.sendTitle(
-                            announce.mode.equals("title") ? text : "",
-                            announce.mode.equals("subtitle") ? text : "",
-                            announce.fadeIn, announce.stay, announce.fadeOut);
+        for (String mode : announce.modes) {
+            switch (mode) {
+                case "title":
+                case "subtitle": {
+                    if (paper) {
+                        Component text = ColorUtil.component(raw);
+                        Component main = mode.equals("title") ? text : Component.empty();
+                        Component sub = mode.equals("subtitle") ? text : Component.empty();
+                        Title title = Title.title(main, sub, Title.Times.times(
+                                Duration.ofMillis(announce.fadeIn * 50L),
+                                Duration.ofMillis(announce.stay * 50L),
+                                Duration.ofMillis(announce.fadeOut * 50L)));
+                        player.showTitle(title);
+                    } else {
+                        String text = ColorUtil.displayText(raw);
+                        player.sendTitle(
+                                mode.equals("title") ? text : "",
+                                mode.equals("subtitle") ? text : "",
+                                announce.fadeIn, announce.stay, announce.fadeOut);
+                    }
+                    break;
                 }
-                break;
+                case "actionbar":
+                    if (paper) {
+                        player.sendActionBar(ColorUtil.component(raw));
+                    } else {
+                        player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+                                TextComponent.fromLegacyText(ColorUtil.displayText(raw)));
+                    }
+                    break;
+                default: // chat
+                    if (paper) {
+                        player.sendMessage(ColorUtil.component(raw));
+                    } else {
+                        player.sendMessage(ColorUtil.displayText(raw));
+                    }
+                    break;
             }
-            case "actionbar":
-                if (paper) {
-                    player.sendActionBar(ColorUtil.component(raw));
-                } else {
-                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-                            TextComponent.fromLegacyText(ColorUtil.displayText(raw)));
-                }
-                break;
-            default: // chat
-                if (paper) {
-                    player.sendMessage(format(announce.text, player));
-                } else {
-                    player.sendMessage(ColorUtil.displayText(raw));
-                }
-                break;
         }
-        debug("Announce (" + announce.mode + ") sent to " + player.getName());
+        debug("Announce (" + String.join("+", announce.modes) + ") sent to " + player.getName());
     }
 
     private HologramConfig cloneHologram(HologramConfig source, Player player) {

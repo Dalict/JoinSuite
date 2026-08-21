@@ -20,9 +20,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class JoinSuite extends JavaPlugin {
 
@@ -90,7 +93,7 @@ public class JoinSuite extends JavaPlugin {
             getLogger().info("PlaceholderAPI detected: PAPI placeholders enabled in texts, %joinsuite_*% placeholders registered.");
         }
 
-        getLogger().info("JoinSuite 2.9.0 enabled!");
+        getLogger().info("JoinSuite 2.10.0 enabled!");
     }
 
     @Override
@@ -283,16 +286,29 @@ public class JoinSuite extends JavaPlugin {
         return new HologramConfig(defaultDuration, lines, holoSection.getBoolean("background", true));
     }
 
-    /** 加载加入公告配置（join-announce 段） */
+    /** 加载加入公告配置（join-announce 段）。mode 支持逗号分隔多选，如 "title,actionbar" */
     private AnnounceConfig loadAnnounceConfig(ConfigurationSection section, String path) {
         ConfigurationSection ann = section.getConfigurationSection(path);
         if (ann == null || !ann.getBoolean("enabled", true)) return null;
 
         String text = ann.getString("text", "");
         if (text.isEmpty()) return null;
-        return new AnnounceConfig(
-                ann.getString("mode", "chat").toLowerCase(),
-                text,
+
+        Set<String> known = new HashSet<>(Arrays.asList("chat", "title", "subtitle", "actionbar"));
+        List<String> modes = new ArrayList<>();
+        for (String raw : ann.getString("mode", "chat").split(",")) {
+            String mode = raw.trim().toLowerCase();
+            if (mode.isEmpty()) continue;
+            if (known.contains(mode)) {
+                modes.add(mode);
+            } else {
+                getLogger().warning("Unknown join-announce mode '" + raw + "' in " + path
+                        + " (valid: chat, title, subtitle, actionbar)");
+            }
+        }
+        if (modes.isEmpty()) modes.add("chat");
+
+        return new AnnounceConfig(modes, text,
                 ann.getInt("fade-in", 10),
                 ann.getInt("stay", 60),
                 ann.getInt("fade-out", 10));
@@ -401,16 +417,16 @@ public class JoinSuite extends JavaPlugin {
         }
     }
 
-    /** 加入公告配置：chat=聊天栏 / title=大标题 / subtitle=小标题 / actionbar=动作栏 */
+    /** 加入公告配置：modes 为显示类型列表（chat=聊天栏 / title=大标题 / subtitle=小标题 / actionbar=动作栏），可多选同时生效 */
     public static class AnnounceConfig {
-        public final String mode;
+        public final List<String> modes;
         public final String text;
         public final int fadeIn;  // 仅 title/subtitle 生效（tick）
         public final int stay;
         public final int fadeOut;
 
-        public AnnounceConfig(String mode, String text, int fadeIn, int stay, int fadeOut) {
-            this.mode = mode;
+        public AnnounceConfig(List<String> modes, String text, int fadeIn, int stay, int fadeOut) {
+            this.modes = modes;
             this.text = text;
             this.fadeIn = fadeIn;
             this.stay = stay;

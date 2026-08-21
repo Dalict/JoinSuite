@@ -89,7 +89,9 @@ newbie:
   join-announce:
     enabled: true
     # 显示位置：chat=聊天栏 / title=大标题 / subtitle=小标题 / actionbar=动作栏
-    # Display target: chat / title / subtitle / actionbar
+    # 可多选，逗号分隔，如 "title,actionbar"（同时显示）
+    # Display targets: chat / title / subtitle / actionbar;
+    # multiple allowed, comma-separated, e.g. "title,actionbar"
     mode: "title"
     text: "&e欢迎新玩家 &f{player}"
     # 大标题/小标题参数（tick，20tick=1秒）：淡入、停留、淡出
@@ -177,7 +179,7 @@ groups:
     leave-message: "&#FF5555[管理] &f{player} &7离开了游戏"
     join-announce:
       enabled: true
-      mode: "subtitle"
+      mode: "subtitle,actionbar"
       text: "&#FF5555管理员 {player} 上线了"
       fade-in: 10
       stay: 60

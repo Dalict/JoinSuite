@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://raw.githubusercontent.com/Dalict/JoinSuite/main/assets/icon-256.png" alt="joinsuite-logo" width="15%"/>
+<img src="https://cdn.jsdelivr.net/gh/Dalict/JoinSuite@main/assets/icon-256.png" alt="joinsuite-logo" width="15%"/>
 </p>
 
 <h1 align="center">JoinSuite</h1>
